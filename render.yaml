@@ -2,8 +2,7 @@ services:
   # Spring Boot Web Service (using existing PostgreSQL database)
   - type: web
     name: coffee-shop-api
-    runtime: java
-    region: frankfurt  # Same region as your database for optimal performance
+    runtime: docker
     plan: free
     buildCommand: ./mvnw clean package -DskipTests
     startCommand: java -Dserver.port=$PORT -jar target/*.jar
