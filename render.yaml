@@ -5,7 +5,7 @@ services:
     runtime: docker
     plan: free
     buildCommand: ./mvnw clean package -DskipTests
-    startCommand: java -Dserver.port=$PORT -jar target/*.jar
+    dockerCommand: java -Dserver.port=$PORT -jar target/*.jar
     healthCheckPath: /actuator/health
     envVars:
       - key: SPRING_PROFILES_ACTIVE
