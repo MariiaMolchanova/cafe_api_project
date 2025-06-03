@@ -1,0 +1,34 @@
+# Ignore Git files
+.git
+.gitignore
+
+# Ignore IDE files
+.idea/
+*.iml
+.vscode/
+
+# Ignore build artifacts
+target/
+!target/*.jar
+
+# Ignore logs
+logs/
+*.log
+
+# Ignore temporary files
+*.tmp
+*.swp
+*.swo
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore documentation
+README.md
+JMX_FIX_README.md
+docker-compose-elk.yml
+
+# Ignore local environment files
+.env
+.env.local 

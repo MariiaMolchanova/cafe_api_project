@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders - Coffee Shop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8B4513, #D2691E);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #8B4513;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .search-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #8B4513;
+        }
+        
+        .search-section h3 {
+            color: #8B4513;
+            margin-bottom: 15px;
+        }
+        
+        .search-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .search-controls input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .search-controls input:focus {
+            outline: none;
+            border-color: #8B4513;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #8B4513;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #A0522D;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .orders-grid {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .order-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #28a745;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .order-id {
+            font-weight: bold;
+            color: #8B4513;
+            font-size: 18px;
+        }
+        
+        .order-total {
+            background: #28a745;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .order-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .order-items {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .order-items h4 {
+            color: #8B4513;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .items-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .item-tag {
+            background: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #495057;
+        }
+        
+        .no-orders {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 18px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #8B4513;
+            font-size: 18px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📦 Orders Management</h1>
+        </div>
+        
+        <div class="search-section">
+            <h3>🔍 Search Orders</h3>
+            <div class="search-controls">
+                <input type="text" id="customerSearch" placeholder="Enter customer name to search..." />
+                <button onclick="searchByCustomer()" class="btn btn-primary">Search by Customer</button>
+                <button onclick="loadAllOrders()" class="btn btn-secondary">Show All Orders</button>
+            </div>
+        </div>
+        
+        <div id="loading" class="loading" style="display: none;">
+            Loading orders...
+        </div>
+        
+        <div id="ordersContainer" class="orders-grid">
+            <!-- Orders will be loaded here -->
+        </div>
+        
+        <div class="navigation">
+            <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+            <a href="/" class="btn btn-secondary">Home</a>
+        </div>
+    </div>
+
+    <script>
+        // Load all orders when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAllOrders();
+        });
+        
+        // Load all orders
+        async function loadAllOrders() {
+            showLoading(true);
+            
+            try {
+                const response = await fetch('/orders');
+                const orders = await response.json();
+                
+                console.log('Loaded orders:', orders);
+                displayOrders(orders, 'All Orders');
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                displayError('Failed to load orders: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // Search orders by customer name
+        async function searchByCustomer() {
+            const customerName = document.getElementById('customerSearch').value.trim();
+            
+            if (!customerName) {
+                alert('Please enter a customer name to search');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const response = await fetch(`/orders/by-customer?customerName=${encodeURIComponent(customerName)}`);
+                const orders = await response.json();
+                
+                console.log(`Orders for customer "${customerName}":`, orders);
+                displayOrders(orders, `Orders for "${customerName}"`);
+            } catch (error) {
+                console.error('Error searching orders:', error);
+                displayError('Failed to search orders: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // Display orders in the container
+        function displayOrders(orders, title) {
+            const container = document.getElementById('ordersContainer');
+            
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div class="no-orders">
+                        <h3>${title}</h3>
+                        <p>No orders found.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const ordersHtml = orders.map(order => `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-id">Order #${order.id}</div>
+                        <div class="order-total">$${order.totalAmount.toFixed(2)}</div>
+                    </div>
+                    
+                    <div class="order-info">
+                        <div class="info-item">
+                            <div class="info-label">Customer</div>
+                            <div class="info-value">${order.customerName}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Cafe</div>
+                            <div class="info-value">${order.cafe ? order.cafe.name : 'N/A'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Location</div>
+                            <div class="info-value">${order.cafe ? (order.cafe.address + ', ' + order.cafe.city) : 'N/A'}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="order-items">
+                        <h4>Items Ordered:</h4>
+                        <div class="items-list">
+                            ${order.items && order.items.length > 0 
+                                ? order.items.map(item => `
+                                    <span class="item-tag">${item.name} - $${item.price}</span>
+                                  `).join('')
+                                : '<span class="item-tag">No items found</span>'
+                            }
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = `
+                <h3 style="color: #8B4513; margin-bottom: 20px;">${title} (${orders.length} found)</h3>
+                ${ordersHtml}
+            `;
+        }
+        
+        // Display error message
+        function displayError(message) {
+            const container = document.getElementById('ordersContainer');
+            container.innerHTML = `
+                <div class="no-orders">
+                    <h3>Error</h3>
+                    <p style="color: #dc3545;">${message}</p>
+                </div>
+            `;
+        }
+        
+        // Show/hide loading indicator
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+        
+        // Handle Enter key in search input
+        document.getElementById('customerSearch').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchByCustomer();
+            }
+        });
+    </script>
+</body>
+</html> 
