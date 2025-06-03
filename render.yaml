@@ -2,7 +2,7 @@ services:
   # Spring Boot Web Service (using existing PostgreSQL database)
   - type: web
     name: coffee-shop-api
-    env: java
+    runtime: java
     region: frankfurt  # Same region as your database for optimal performance
     plan: free
     buildCommand: ./mvnw clean package -DskipTests
