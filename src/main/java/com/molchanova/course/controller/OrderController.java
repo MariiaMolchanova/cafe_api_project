@@ -20,13 +20,11 @@ public class OrderController {
         this.orderRepo = orderRepo;
     }
 
-    // Web page endpoint
     @GetMapping("/view")
     public String ordersPage() {
         return "orders";
     }
 
-    // REST API endpoints
     @PostMapping
     @ResponseBody
     public Order createOrder(@RequestBody OrderRequestDTO orderRequest) {
