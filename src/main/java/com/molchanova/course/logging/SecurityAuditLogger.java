@@ -44,7 +44,7 @@ public class SecurityAuditLogger {
                 getClientIpAddress(request));
                 
         } finally {
-            // Clear MDC to prevent memory leaks
+     
             MDC.clear();
         }
     }
