@@ -31,7 +31,7 @@ public class DashboardController {
             
             model.addAttribute("username", authentication.getName());
             
-            // Fetch data needed for the dashboard forms
+           
             List<Cafe> cafes = cafeRepo.findAll();
             List<MenuItem> menuItems = menuItemRepo.findAll();
             
