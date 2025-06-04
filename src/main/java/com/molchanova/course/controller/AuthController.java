@@ -39,7 +39,6 @@ public class AuthController {
     @Autowired
     SecurityAuditLogger securityAuditLogger;
     
-    // Test endpoint to check users
     @GetMapping("/api/test/users")
     @ResponseBody
     public ResponseEntity<?> getAllUsers() {
@@ -49,7 +48,7 @@ public class AuthController {
             users.stream().map(User::getUsername).collect(Collectors.toList()));
     }
     
-    // Show login form
+  
     @GetMapping("/login")
     public String showLoginForm(@RequestParam(required = false) String error, 
                                @RequestParam(required = false) String logout,
@@ -66,7 +65,7 @@ public class AuthController {
         return "login";
     }
     
-    // REST API login endpoint
+
     @PostMapping("/api/auth/signin")
     @ResponseBody
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequestDTO loginRequest,
@@ -86,7 +85,7 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
             
-            // Log successful authentication
+         
             securityAuditLogger.logLoginSuccess(userDetails.getUsername(), request);
             securityAuditLogger.logTokenGeneration(userDetails.getUsername());
             
@@ -94,7 +93,7 @@ public class AuthController {
             
             return ResponseEntity.ok(new JwtResponseDTO(jwt, userDetails.getId(), userDetails.getUsername(), roles));
         } catch (Exception e) {
-            // Log failed authentication
+    
             securityAuditLogger.logLoginFailure(loginRequest.getUsername(), e.getMessage(), request);
             logger.warn("API login failed for user: {} - Reason: {}", 
                 maskUsername(loginRequest.getUsername()), e.getMessage());
@@ -119,7 +118,7 @@ public class AuthController {
         return username.charAt(0) + "***" + username.charAt(username.length() - 1);
     }
     
-    // Simple response class for error messages
+
     public static class MessageResponse {
         private String message;
         
