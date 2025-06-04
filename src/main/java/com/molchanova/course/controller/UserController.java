@@ -28,14 +28,12 @@ public class UserController {
         this.securityAuditLogger = securityAuditLogger;
     }
     
-    // Show registration form
     @GetMapping("/register")
     public String showRegistrationForm(HttpServletRequest request) {
         logger.debug("Registration form accessed from IP: {}", getClientIp(request));
         return "register";
     }
     
-    // Handle form submission
     @PostMapping("/register")
     public String handleRegistration(@RequestParam String username, 
                                    @RequestParam String password,
@@ -73,7 +71,6 @@ public class UserController {
         }
     }
     
-    // REST API endpoint for registration
     @PostMapping("/api/auth/register")
     @ResponseBody
     public ResponseEntity<?> registerUser(@RequestBody UserDataRequestDTO userRequest,
