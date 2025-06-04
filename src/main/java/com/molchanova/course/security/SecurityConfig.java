@@ -54,20 +54,20 @@ public class SecurityConfig {
         http
                 .cors(withDefaults())
                 .sessionManagement(sess -> sess
-                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Allow sessions for web forms
+                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) 
                     .maximumSessions(1)
                     .maxSessionsPreventsLogin(false)
                 )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                    // Public endpoints
+                   
                     .requestMatchers("/", "/register", "/login", "/api/auth/**", "/api/test/**", "/cafes/**", "/menu/**", "/orders/**").permitAll()
-                    // Protected endpoints
+                    
                     .requestMatchers("/dashboard").authenticated()
                     .anyRequest().authenticated()
                 )
-                // Configure form login for web interface
+               
                 .formLogin(form -> form
                     .loginPage("/login")
                     .loginProcessingUrl("/login")
@@ -77,7 +77,7 @@ public class SecurityConfig {
                     .passwordParameter("password")
                     .permitAll()
                 )
-                // Configure logout
+              
                 .logout(logout -> logout
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                     .logoutSuccessUrl("/login?logout=true")
@@ -85,19 +85,19 @@ public class SecurityConfig {
                     .deleteCookies("JSESSIONID")
                     .permitAll()
                 )
-                // Disable CSRF for API endpoints, enable for web forms
+             
                 .csrf(csrf -> csrf
                     .ignoringRequestMatchers("/api/**", "/cafes/**", "/menu/**", "/orders/**")
                 )
-                // Configure exception handling
+               
                 .exceptionHandling(ex -> ex
                     .authenticationEntryPoint((req, res, authEx) -> {
                         String requestURI = req.getRequestURI();
                         if (requestURI.startsWith("/api/")) {
-                            // For API requests, return 401
+                          
                             res.sendError(HttpServletResponse.SC_UNAUTHORIZED, authEx.getMessage());
                         } else {
-                            // For web requests, redirect to login
+                           
                             res.sendRedirect("/login");
                         }
                     })
